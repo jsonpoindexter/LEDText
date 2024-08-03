@@ -143,13 +143,37 @@ void cLEDText::SetOptionsChangeMode(uint16_t Options)
 }
 
 
-void cLEDText::SetText(unsigned char *Txt, uint16_t TxtSize)
+void cLEDText::SetText(unsigned char *Txt, uint16_t TxtSize, uint16_t Pos)
 {
   m_pText = Txt;
   m_pSize = TxtSize;
-  m_TextPos = m_EOLtp = m_XBitPos = m_YBitPos = 0;
+  m_TextPos = Pos;
+  m_EOLtp = 0;
+  m_XBitPos = 0;
+  m_YBitPos = 0;
   m_LastDelayTP = m_LastCustomRCTP = 0;
   Initialised = true;
+}
+
+
+
+void cLEDText::SetTextPosition(Position Pos)
+{
+  m_TextPos = Pos.m_TextPos;
+  m_XBitPos = Pos.m_XBitPos;
+  m_YBitPos = Pos.m_YBitPos;
+
+  // Ensure color settings are reset
+  uint16_t opt = m_Options;
+  uint8_t bDim = m_BackDim, cDim = m_ColDim, c1[3], c2[3], RC;
+  memcpy(c1, m_Col1, sizeof(c1));
+  memcpy(c2, m_Col2, sizeof(c2));
+  DecodeOptions(&m_TextPos, &opt, &bDim, c1, c2, &cDim, &RC);
+}
+
+cLEDText::Position cLEDText::GetTextPosition()
+{
+  return {m_TextPos, m_XBitPos, m_YBitPos};
 }
 
 

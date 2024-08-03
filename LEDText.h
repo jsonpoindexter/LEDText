@@ -86,6 +86,11 @@
 class cLEDText
 {
   public:
+    struct Position {
+        uint16_t m_TextPos;
+        uint8_t m_XBitPos;
+        uint8_t m_YBitPos;
+    };
     void SetFont(const uint8_t *FontData);
     void Init(cLEDMatrixBase *Matrix, uint16_t Width, uint16_t Height, int16_t OriginX = 0, int16_t OriginY = 0);
     void SetBackgroundMode(uint16_t Options, uint8_t Dimming = 0x00);
@@ -94,10 +99,14 @@ class cLEDText
     void SetTextColrOptions(uint16_t Options, uint8_t ColA1 = 0xff, uint8_t ColA2 = 0xff, uint8_t ColA3 = 0xff, uint8_t ColB1 = 0xff, uint8_t ColB2 = 0xff, uint8_t ColB3 = 0xff);
     void SetFrameRate(uint8_t Rate);
     void SetOptionsChangeMode(uint16_t Options);
-    void SetText(unsigned char *Txt, uint16_t TxtSize);
+    void SetText(unsigned char *Txt, uint16_t TxtSize, uint16_t Pos = 0);
+    void SetTextPosition( Position Pos );
+    Position GetTextPosition();
     int UpdateText();
     uint8_t FontWidth()  { return(m_FontWidth); };
     uint8_t FontHeight() { return(m_FontHeight); };
+
+
   private:
     void DecodeOptions(uint16_t *tp, uint16_t *opt, uint8_t *backDim, uint8_t *col1, uint8_t *col2, uint8_t *colDim, uint8_t *RC);
 
@@ -112,6 +121,8 @@ class cLEDText
     uint8_t m_BackDim, m_ColDim, m_Col1[3], m_Col2[3], m_FrameRate;
     uint16_t m_LastDelayTP, m_LastCustomRCTP, m_DelayCounter;
     bool m_FProp, Initialised;
+
+
 };
 
 #endif
